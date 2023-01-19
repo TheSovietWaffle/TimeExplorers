@@ -9,11 +9,11 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     public float moveSpeed;
     public float groundDrag;
-
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
     bool readyToJump;
+    public float wallrunSpeed;
 
     [Header("KeyBinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -28,6 +28,16 @@ public class PlayerMovement : MonoBehaviour
     float verticalInput;
     Vector3 moveDirection;
     Rigidbody rb;
+    public MovementState state;
+    public enum MovementState
+    {
+        walking,
+        sprinting,
+        wallruning,
+        air
+    }
+
+    public bool wallruning;
 
     // Start is called before the first frame update
     void Start()
@@ -112,4 +122,15 @@ public class PlayerMovement : MonoBehaviour
     {
         readyToJump = true;
     }
+    
+    private void StateHandler()
+    {
+        if(wallruning)
+        {
+            state = MovementState.wallruning;
+            moveSpeed = wallrunSpeed;
+        }
+    }
+
+    
 }
