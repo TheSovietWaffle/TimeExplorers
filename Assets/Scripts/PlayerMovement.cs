@@ -12,8 +12,11 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
+    public float swingSpeed;
+    public float climbSpeed;
     bool readyToJump;
     public float wallrunSpeed;
+    
 
     [Header("KeyBinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -21,7 +24,10 @@ public class PlayerMovement : MonoBehaviour
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask whatIsGround;
-    bool grounded;
+    public bool grounded;
+
+    [Header("References")]
+    public Climbing climbingScript;
 
     public Transform orientation;
     float horizontalInput;
@@ -34,10 +40,14 @@ public class PlayerMovement : MonoBehaviour
         walking,
         sprinting,
         wallruning,
-        air
+        air,
+        swinging,
+        climbing
     }
 
     public bool wallruning;
+    public bool swinging;
+    public bool climbing;
 
     // Start is called before the first frame update
     void Start()
@@ -65,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        
         MovePlayer();
     }
 
@@ -86,6 +97,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
+        
+        
+        if(swinging) return;
         //calucate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
@@ -129,6 +143,18 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.wallruning;
             moveSpeed = wallrunSpeed;
+        }
+
+        else if (swinging)
+        {
+            state = MovementState.swinging;
+            moveSpeed = swingSpeed;
+        }
+        
+        else if(climbing)
+        {
+            state = MovementState.climbing;
+            moveSpeed = climbSpeed;
         }
     }
 

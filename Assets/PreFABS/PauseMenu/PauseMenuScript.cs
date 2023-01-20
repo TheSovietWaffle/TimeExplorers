@@ -12,7 +12,7 @@ public class PauseMenuScript : MonoBehaviour
     public GameObject pauseMenuUI;
     public GameObject LoadingScreenS;
     public GameObject PastScene;
-    public Image LoadingBarFill;
+    public Slider slider;
 
     // Update is called once per frame
     void Update()
@@ -70,7 +70,7 @@ public class PauseMenuScript : MonoBehaviour
         while (!operationn.isDone)
         {
             float progressValue = Mathf.Clamp01(operationn.progress / 0.9f);
-            LoadingBarFill.fillAmount = progressValue;
+            slider.value = progressValue;
             yield return null;
         }
         
@@ -93,7 +93,7 @@ public class PauseMenuScript : MonoBehaviour
         while (!operation.isDone)
         {
             float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
-            LoadingBarFill.fillAmount = progressValue;
+            slider.value = progressValue;
             yield return null;
         }
         

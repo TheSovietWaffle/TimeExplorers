@@ -8,12 +8,12 @@ public class MainMenu : MonoBehaviour
 {
     public GameObject LoadingScreenS;
     public GameObject PastScene;
-    public Image LoadingBarFill;
+    public Slider slider;
 
 
     public void QuitGame()
     {
-        Debug.Log("Quit!");
+        
         Application.Quit();
     }
 
@@ -35,7 +35,7 @@ public class MainMenu : MonoBehaviour
         while (!operation.isDone)
         {
             float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
-            LoadingBarFill.fillAmount = progressValue;
+            slider.value = progressValue;
             yield return null;
         }
     }
