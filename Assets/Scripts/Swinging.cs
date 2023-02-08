@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Swinging : MonoBehaviour
 {
@@ -10,14 +11,17 @@ public class Swinging : MonoBehaviour
     [Header("Refferences")]
     public LineRenderer lr;
     public Transform gunTip, cam, player;
+    public PlayerCam cam1;
     public LayerMask whatIsGrappleable;
     public PlayerMovement pm;
+    
     
     [Header("Swinging")]
     private float maxSwingDistance = 25f;
     private Vector3 swingPoint;
     private SpringJoint joint;
     private Vector3 currentGrapplePosition;
+    
 
     [Header("OdmGear")]
     public Transform orientation;
@@ -78,7 +82,8 @@ public class Swinging : MonoBehaviour
 
             lr.positionCount = 2;
             currentGrapplePosition = gunTip.position;
-        
+            cam1.DoFov(110f);
+            
     }
     
     void StopSwing()
@@ -86,6 +91,7 @@ public class Swinging : MonoBehaviour
         pm.swinging = false;
         lr.positionCount = 0;
         Destroy(joint);
+        cam1.DoFov(100f);
     }
 
     void DrawRope()
@@ -169,4 +175,5 @@ public class Swinging : MonoBehaviour
 
         predictionHit = raycastHit.point == Vector3.zero ? sphereCastHit : raycastHit;
     }
+    
 }

@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Net.Sockets;
 using UnityEngine;
+using DG.Tweening;
 
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed;
+    public float slopeSpeed;
     public float groundDrag;
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
     public float swingSpeed;
     public float climbSpeed;
+    public float jumpSpeed;
     bool readyToJump;
     public float wallrunSpeed;
     
@@ -24,7 +27,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask whatIsGround;
+    public LayerMask whatIsSlope;
     public bool grounded;
+    public bool sloped;
 
     [Header("References")]
     public Climbing climbingScript;
@@ -42,12 +47,16 @@ public class PlayerMovement : MonoBehaviour
         wallruning,
         air,
         swinging,
-        climbing
+        climbing,
+        sliding
+        
     }
 
     public bool wallruning;
     public bool swinging;
     public bool climbing;
+    public bool sliding;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -62,13 +71,15 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
-        
+        sloped = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsSlope);
 
         MyInput();
         SpeedControl();
 
         if (grounded)
             rb.drag = groundDrag;
+        else if(sloped)
+            rb.drag = -60f;
         else
             rb.drag = 0f;
     }
@@ -85,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
 
         //when to jump
-        if (Input.GetKey(jumpKey) && readyToJump && grounded)
+        if (Input.GetKey(jumpKey) && readyToJump && (grounded||sloped))
         {
             readyToJump = false;
 
@@ -106,7 +117,9 @@ public class PlayerMovement : MonoBehaviour
         //on ground
         if (grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-
+        //on slope
+        else if(sloped)
+            rb.AddForce(moveDirection.normalized * slopeSpeed * 10f, ForceMode.Force);
         //in air
         else if (!grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
@@ -156,6 +169,15 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.climbing;
             moveSpeed = climbSpeed;
         }
+        
+    }
+
+    public void CameraEffects()
+    {
+        bool shake = Physics.Raycast(Vector3.down, Vector3.down, 10f, whatIsGround);
+
+       
+
     }
 
     

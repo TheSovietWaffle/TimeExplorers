@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Hub/Hub.unity
     guid: 74fe883def5520a47a45d13a72f41ce2
+  - enabled: 1
+    path: Assets/Scenes/Egypt/Level 1 - Egypt.unity
+    guid: 587898e0dc555d540a536f2dee39358f
   m_configObjects: {}

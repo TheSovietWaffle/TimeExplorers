@@ -103,7 +103,7 @@ public class Climbing : MonoBehaviour
     private void StartClimbing()
     {
         climbing = true;
-        cam.DoFov(105f);
+        cam.DoFov(110f);
         pm.climbing = true;
 
         lastWall = frontWallHit.transform;

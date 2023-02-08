@@ -14,14 +14,14 @@ TagManager:
   - whatIsGround
   - whatIsWall
   - whatIsGrappleable
+  - whatIsSlope
   - 
-  - 
-  - 
+  - whatIsInteractable
   - player
   - 
   - 
   - 
-  - 
+  - Icon
   - 
   - 
   - 

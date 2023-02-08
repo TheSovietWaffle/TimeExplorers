@@ -13,11 +13,12 @@ public class PauseMenuScript : MonoBehaviour
     public GameObject LoadingScreenS;
     public GameObject PastScene;
     public Slider slider;
+    public static bool isActiveMenu = false;
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && isActiveMenu == false)
         {
             if (GameIsPaused)
             {

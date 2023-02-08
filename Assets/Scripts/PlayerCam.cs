@@ -7,9 +7,10 @@ public class PlayerCam : MonoBehaviour
 {
     public float sensX;
     public float sensY;
-
+    
     public Transform orientation;
     public Transform camHolder;
+    public PlayerMovement pm;
 
     float xRotation;
     float yRotation;
@@ -45,4 +46,7 @@ public class PlayerCam : MonoBehaviour
     {
         transform.DOLocalRotate(new Vector3(0, 0, zTilt), 0.25f);
     }
+
+    
+    
 }
