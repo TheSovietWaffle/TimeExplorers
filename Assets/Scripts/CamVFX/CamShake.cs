@@ -16,7 +16,7 @@ public class CamShake : MonoBehaviour
     // Update is called once per frame
     void Update()
     {   
-        if(pm.swinging)GetComponent<Camera>().DOShakePosition(shakeDuration,0.1f,1);
+        if(pm.swinging)GetComponent<Camera>().DOShakePosition(shakeDuration,0.2f,1);
             
             
         

@@ -4,6 +4,7 @@ public class LightSwitch: Interactable {
 
     public GameObject sceneLoaderCanvas; // im using m_Light name since 'light' is already a variable used by unity
     public bool isOn;
+    public Canvas pauMenu;
 
     private void Start() {
         
@@ -13,7 +14,8 @@ public class LightSwitch: Interactable {
         sceneLoaderCanvas.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0f;
-        PauseMenuScript.isActiveMenu = true;
+        pauMenu.gameObject.SetActive(false);
+        Cursor.visible = true;
     }
 
     public override string GetDescription() {

@@ -11,122 +11,53 @@ public class LevelSelecting : MonoBehaviour
     public Slider slider;
     public GameObject LoadingScreenS;
     public GameObject LevelScreenCanvas;
+    public Canvas pauCanv;  
+    public int a;
+    public int b;
+    public int c;  
 
-    private void Start() 
+    private void Start()
     {
-        PauseMenuScript.isActiveMenu = true;
+        
     }
 
-    private void Update() 
+    private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape)) Exitting();
+        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+             Exitting();
+             StartCoroutine(Pauser());
+        }
+        
     }
 
     public void level1()
     {
-        levelSelection = 3;
-        LoadSceneMain();
+        if (PlayerPrefs.GetInt("LevelsCompleted") >= a-3)
+        {
+            levelSelection = a;
+            LoadSceneMain();
+        }
     }
     public void level2()
     {
-        levelSelection = 4;
-        LoadSceneMain();
+        if (PlayerPrefs.GetInt("LevelsCompleted") >= b-3)
+        {
+            levelSelection = b;
+            LoadSceneMain();
+        }
     }
+
     public void level3()
     {
-        levelSelection = 5;
-        LoadSceneMain();
+        if (PlayerPrefs.GetInt("LevelsCompleted") >= c-3)
+        {
+            levelSelection = c;
+            LoadSceneMain();
+        }
     }
-    public void level4()
-    {
-        levelSelection = 6;
-        LoadSceneMain();
-    }
-    public void level5()
-    {
-        levelSelection = 7;
-        LoadSceneMain();
-    }
-    public void level6()
-    {
-        levelSelection = 8;
-        LoadSceneMain();
-    }
-    public void level7()
-    {
-        levelSelection = 9;
-        LoadSceneMain();
-    }
-    public void level8()
-    {
-        levelSelection = 10;
-        LoadSceneMain();
-    }
-    public void level9()
-    {
-        levelSelection = 11;
-        LoadSceneMain();
-    }
-    public void level10()
-    {
-        levelSelection = 12;
-        LoadSceneMain();
-    }
-    public void level11()
-    {
-        levelSelection = 13;
-        LoadSceneMain();
-    }
-    public void level12()
-    {
-        levelSelection = 14;
-        LoadSceneMain();
-    }
-    public void level13()
-    {
-        levelSelection = 15;
-        LoadSceneMain();
-    }
-    public void level14()
-    {
-        levelSelection = 16;
-        LoadSceneMain();
-    }
-    public void level15()
-    {
-        levelSelection = 17;
-        LoadSceneMain();
-    }
-    public void level16()
-    {
-        levelSelection = 18;
-        LoadSceneMain();
-    }
-    public void level17()
-    {
-        levelSelection = 19;
-        LoadSceneMain();
-    }
-    public void level18()
-    {
-        levelSelection = 20;
-        LoadSceneMain();
-    }
-    public void level19()
-    {
-        levelSelection = 21;
-        LoadSceneMain();
-    }
-    public void level20()
-    {
-        levelSelection = 22;
-        LoadSceneMain();
-    }
-    public void level21()
-    {
-        levelSelection = 23;
-        LoadSceneMain();
-    }
+    
     
 
     public void LoadSceneMain()
@@ -134,7 +65,7 @@ public class LevelSelecting : MonoBehaviour
 
         StartCoroutine(LoadSceneAsync());
         Time.timeScale = 1f;
-        
+
     }
 
     IEnumerator LoadSceneAsync()
@@ -143,7 +74,7 @@ public class LevelSelecting : MonoBehaviour
         AsyncOperation operation = SceneManager.LoadSceneAsync(levelSelection);
 
         LoadingScreenS.SetActive(true);
-        
+
 
         while (!operation.isDone)
         {
@@ -151,15 +82,21 @@ public class LevelSelecting : MonoBehaviour
             slider.value = progressValue;
             yield return null;
         }
-        
+
     }
 
-    async void  Exitting()
+    async void Exitting()
     {
         LevelScreenCanvas.SetActive(false);
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         await Task.Delay(4000);
         PauseMenuScript.isActiveMenu = false;
+    }
+
+    IEnumerator Pauser()
+    {
+        yield return new WaitForSecondsRealtime(0.5f);
+        pauCanv.gameObject.SetActive(true);
     }
 }

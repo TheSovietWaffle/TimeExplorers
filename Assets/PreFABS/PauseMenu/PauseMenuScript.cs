@@ -27,6 +27,7 @@ public class PauseMenuScript : MonoBehaviour
             else
             {
                 Pause();
+                
             }
         }
     }

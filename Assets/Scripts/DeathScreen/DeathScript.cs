@@ -13,7 +13,7 @@ public class DeathScript : MonoBehaviour
     
     void OnTriggerEnter(Collider other) 
     {
-        LoadSceneMain();
+        if(other.transform.CompareTag("Player")) LoadSceneMain();
     }
 
     public void LoadSceneMain()

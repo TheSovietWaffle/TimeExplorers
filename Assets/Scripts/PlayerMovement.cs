@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Net.Sockets;
 using UnityEngine;
 using DG.Tweening;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpSpeed;
     bool readyToJump;
     public float wallrunSpeed;
-    
+
 
     [Header("KeyBinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -28,12 +29,17 @@ public class PlayerMovement : MonoBehaviour
     public float playerHeight;
     public LayerMask whatIsGround;
     public LayerMask whatIsSlope;
+    
     public bool grounded;
     public bool sloped;
+    public float hitHeight;
+    RaycastHit distRay;
+    public bool camShake;
 
     [Header("References")]
     public Climbing climbingScript;
-
+    public TMPro.TextMeshProUGUI tracker;
+    public Camera cam;
     public Transform orientation;
     float horizontalInput;
     float verticalInput;
@@ -49,14 +55,14 @@ public class PlayerMovement : MonoBehaviour
         swinging,
         climbing,
         sliding
-        
+
     }
 
     public bool wallruning;
     public bool swinging;
     public bool climbing;
     public bool sliding;
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -73,12 +79,13 @@ public class PlayerMovement : MonoBehaviour
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
         sloped = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsSlope);
 
+        //CameraEffects();
         MyInput();
         SpeedControl();
 
         if (grounded)
             rb.drag = groundDrag;
-        else if(sloped)
+        else if (sloped)
             rb.drag = -60f;
         else
             rb.drag = 0f;
@@ -86,7 +93,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
+
         MovePlayer();
     }
 
@@ -96,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
 
         //when to jump
-        if (Input.GetKey(jumpKey) && readyToJump && (grounded||sloped))
+        if (Input.GetKey(jumpKey) && readyToJump && (grounded || sloped))
         {
             readyToJump = false;
 
@@ -108,9 +115,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
-        
-        
-        if(swinging) return;
+
+
+        if (swinging) return;
         //calucate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
@@ -118,7 +125,7 @@ public class PlayerMovement : MonoBehaviour
         if (grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
         //on slope
-        else if(sloped)
+        else if (sloped)
             rb.AddForce(moveDirection.normalized * slopeSpeed * 10f, ForceMode.Force);
         //in air
         else if (!grounded)
@@ -149,10 +156,10 @@ public class PlayerMovement : MonoBehaviour
     {
         readyToJump = true;
     }
-    
+
     private void StateHandler()
     {
-        if(wallruning)
+        if (wallruning)
         {
             state = MovementState.wallruning;
             moveSpeed = wallrunSpeed;
@@ -163,22 +170,39 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.swinging;
             moveSpeed = swingSpeed;
         }
-        
-        else if(climbing)
+
+        else if (climbing)
         {
             state = MovementState.climbing;
             moveSpeed = climbSpeed;
         }
-        
+
     }
 
     public void CameraEffects()
     {
-        bool shake = Physics.Raycast(Vector3.down, Vector3.down, 10f, whatIsGround);
+        Ray downRay = new Ray(transform.position, -Vector3.up);
+        Physics.Raycast(downRay, out distRay);
+        if (distRay.distance >= 50) camShake = true;
+        tracker.text = distRay.distance.ToString();
+        if (camShake == true && !grounded)
+        {
+            StartCoroutine(Shaker());
+        }
 
-       
+
 
     }
 
-    
+    IEnumerator Shaker()
+    {
+        yield return new WaitUntil(() => grounded == true);
+        Transform oldCamPos = cam.transform;
+        cam.DOShakePosition(0.3f,.1f);
+        /*yield return new WaitForSecondsRealtime(.5f);
+        cam.transform.position  = oldCamPos.transform.position;*/
+        
+    }
+
+
 }

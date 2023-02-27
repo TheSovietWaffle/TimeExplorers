@@ -5,8 +5,7 @@ public class PlayerInteraction: MonoBehaviour {
     public float interactionDistance;
 
     public TMPro.TextMeshProUGUI interactionText;
-    public GameObject interactionHoldGO; // the ui parent to disable when not interacting
-    public UnityEngine.UI.Image interactionHoldProgress; // the progress bar for hold interaction type
+    
 
     Camera cam;
 
@@ -29,14 +28,14 @@ public class PlayerInteraction: MonoBehaviour {
                 interactionText.text = interactable.GetDescription();
                 successfulHit = true;
 
-                interactionHoldGO.SetActive(interactable.interactionType == Interactable.InteractionType.Hold);
+                
             }
         }
 
         // if we miss, hide the UI
         if (!successfulHit) {
             interactionText.text = "";
-            interactionHoldGO.SetActive(false);
+            
         }
     }
 
@@ -49,20 +48,7 @@ public class PlayerInteraction: MonoBehaviour {
                     interactable.Interact();
                 }
                 break;
-            case Interactable.InteractionType.Hold:
-                if (Input.GetKey(key)) {
-                    // we are holding the key, increase the timer until we reach 1f
-                    interactable.IncreaseHoldTime();
-                    if (interactable.GetHoldTime() > 1f) {
-                        interactable.Interact();
-                        interactable.ResetHoldTime();
-                    }
-                } else {
-                    interactable.ResetHoldTime();
-                }
-                interactionHoldProgress.fillAmount = interactable.GetHoldTime();
-                break;
-           
+            
             default:
                 throw new System.Exception("Unsupported type of interactable.");
         }
